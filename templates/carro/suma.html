@@ -1,0 +1,49 @@
+{% extends "../base.html" %} {% load static %} {% load humanize%} {% block title %}Detalle Carro{%endblock %} {% block content %} {% load cart_tag %}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Precio</th>
+            <th scope="col">Cantidad</th>
+            <th scope="col">Imagen</th>
+            <th scope="col">Total</th>
+            <th scope="col">Opciones</th>
+        </tr>
+        Total a Pagar : {{carros.get_subtotal_price|intcomma}} {% for key,value in request.session.cart.items %}
+        <tr>
+            <th scope="row">{{value.product_id}}</th>
+            <td><a class="text-dark text-decoration-none" href="{% url 'tienda:producto_detail' value.product_id %}">{{ value.name }}</a></td>
+            <td>{{value.price|intcomma}}</td>
+            <td>{{value.quantity}}</td>
+            <td><img src="{{value.image}}" style="width: 100px; height: 100px;" alt=""></td>
+            <td>{{ value.price|multiply:value.quantity|intcomma}}</td>
+            <td>
+                <div class="btn-group" role="group" aria-label="Basic outlined example">
+                    <a class="btn btn-outline-primary" href="{% url 'carro:item_increment' value.product_id %}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-bag-plus-fill" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M10.5 3.5a2.5 2.5 0 0 0-5 0V4h5v-.5zm1 0V4H15v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V4h3.5v-.5a3.5 3.5 0 1 1 7 0zM8.5 8a.5.5 0 0 0-1 0v1.5H6a.5.5 0 0 0 0 1h1.5V12a.5.5 0 0 0 1 0v-1.5H10a.5.5 0 0 0 0-1H8.5V8z"/>
+                        </svg>
+                    </a>
+                    <a class="btn btn-outline-primary" href="{% url 'carro:item_decrement' value.product_id %}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-bag-dash-fill" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M10.5 3.5a2.5 2.5 0 0 0-5 0V4h5v-.5zm1 0V4H15v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V4h3.5v-.5a3.5 3.5 0 1 1 7 0zM6 9.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1H6z"/>
+                        </svg>
+                    </a>
+                </div>
+
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+</table>
+
+<a class="btn btn-outline-danger" href="{% url 'carro:cart_clear' %}">
+    Eliminar Cesta
+    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+        <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
+      </svg>
+</a>
+<a class="btn btn-outline-info" href="{% url 'tienda:tienda_home' %}">
+    Seguir Comprando
+</a> {% endblock %}
